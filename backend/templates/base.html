@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JobGuard{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B8B;
+            --secondary: #6A67CE;
+            --accent: #36D1DC;
+            --accent2: #FF9A3C;
+            --danger: #FF4D7E;
+            --success: #00D4AA;
+            --warning: #FFB74D;
+            --dark: #2A2D43;
+            --light: #F8F9FF;
+            --gray: #A6A9C8;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: rgba(106, 103, 206, 0.15);
+            --gradient-1: linear-gradient(135deg, #FF6B8B 0%, #FF9A3C 100%);
+            --gradient-2: linear-gradient(135deg, #6A67CE 0%, #36D1DC 100%);
+            --gradient-3: linear-gradient(135deg, #00D4AA 0%, #6A67CE 100%);
+            --gradient-bg: linear-gradient(135deg, #F8F9FF 0%, #E6E9FF 100%);
+        }
+        
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .flash-success {
+            background: var(--success);
+        }
+        
+        .flash-error, .flash-danger {
+            background: var(--danger);
+        }
+        
+        .flash-info {
+            background: var(--secondary);
+        }
+        
+        .flash-warning {
+            background: var(--warning);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    {% block content %}{% endblock %}
+    
+    {% block scripts %}{% endblock %}
+    
+    <script>
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(() => {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(msg => {
+                msg.style.opacity = '0';
+                msg.style.transform = 'translateX(100%)';
+                setTimeout(() => msg.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

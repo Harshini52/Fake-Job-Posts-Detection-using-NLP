@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | JobGuard Analytics</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      :root {
+        --primary: #4361ee;
+        --primary-light: #4895ef;
+        --primary-dark: #3a56d4;
+        --secondary: #f72585;
+        --accent: #4cc9f0;
+        --warning: #f8961e;
+        --danger: #f94144;
+        --success: #43aa8b;
+        --dark: #2b2d42;
+        --darker: #1a1b2e;
+        --light: #f8f9fa;
+        --gray: #8d99ae;
+        --gray-light: #edf2f4;
+        
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --card-shadow: rgba(67, 97, 238, 0.1);
+        --gradient-primary: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+        --gradient-secondary: linear-gradient(135deg, #f72585 0%, #ff5d9e 100%);
+        --gradient-accent: linear-gradient(135deg, #4cc9f0 0%, #72efdd 100%);
+        --gradient-warning: linear-gradient(135deg, #f8961e 0%, #f9c74f 100%);
+        --gradient-bg: linear-gradient(135deg, #f8f9fa 0%, #edf2f4 100%);
+        --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.98) 100%);
+      }
+
+      body {
+        background: var(--gradient-bg);
+        color: var(--dark);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* Background Animation */
+      .background-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background: var(--gradient-bg);
+      }
+
+      .floating-element {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-light), transparent);
+        opacity: 0.1;
+        animation: float 20s infinite linear;
+      }
+
+      .floating-element:nth-child(1) {
+        width: 400px;
+        height: 400px;
+        top: -200px;
+        right: -100px;
+        animation-delay: 0s;
+      }
+
+      .floating-element:nth-child(2) {
+        width: 300px;
+        height: 300px;
+        bottom: -150px;
+        left: -100px;
+        background: linear-gradient(135deg, var(--secondary), transparent);
+        animation-delay: -5s;
+      }
+
+      .floating-element:nth-child(3) {
+        width: 200px;
+        height: 200px;
+        top: 50%;
+        left: 10%;
+        background: linear-gradient(135deg, var(--accent), transparent);
+        animation-delay: -10s;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        33% {
+          transform: translateY(-30px) rotate(120deg);
+        }
+        66% {
+          transform: translateY(30px) rotate(240deg);
+        }
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Modern Navigation */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 0;
+        position: relative;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        text-decoration: none;
+      }
+
+      .brand-logo {
+        width: 55px;
+        height: 55px;
+        background: var(--gradient-primary);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .brand-text {
+        font-family: "Montserrat", sans-serif;
+        font-size: 2rem;
+        font-weight: 900;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 10px rgba(67, 97, 238, 0.1);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 20px;
+        background: var(--card-bg);
+        border-radius: 15px;
+        box-shadow: 0 5px 20px var(--card-shadow);
+        backdrop-filter: blur(10px);
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+      }
+
+      .user-info h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .user-info p {
+        font-size: 0.8rem;
+        color: var(--gray);
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .nav-btn {
+        padding: 14px 28px;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-btn-primary {
+        background: var(--gradient-primary);
+        color: white;
+        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+      }
+
+      .nav-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(67, 97, 238, 0.4);
+      }
+
+      .nav-btn-secondary {
+        background: var(--card-bg);
+        color: var(--primary);
+        box-shadow: 0 5px 20px var(--card-shadow);
+      }
+
+      .nav-btn-secondary:hover {
+        background: var(--gradient-primary);
+        color: white;
+        transform: translateY(-3px);
+      }
+
+      .nav-btn-logout {
+        background: rgba(249, 65, 68, 0.1);
+        color: var(--danger);
+      }
+
+      .nav-btn-logout:hover {
+        background: var(--danger);
+        color: white;
+      }
+
+      .nav-btn i {
+        font-size: 1.2rem;
+      }
+
+      /* Dashboard Header */
+      .dashboard-header {
+        margin: 40px 0 60px 0;
+        position: relative;
+      }
+
+      .header-content {
+        max-width: 600px;
+      }
+
+      .header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+      }
+
+      .dashboard-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .dashboard-subtitle {
+        font-size: 1.2rem;
+        color: var(--gray);
+        max-width: 500px;
+        line-height: 1.6;
+      }
+
+      /* Stats Cards */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 60px;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 10px 40px var(--card-shadow);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(67, 97, 238, 0.15);
+      }
+
+      .stat-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: var(--gradient-primary);
+      }
+
+      .stat-card:nth-child(2):before {
+        background: var(--gradient-secondary);
+      }
+
+      .stat-card:nth-child(3):before {
+        background: var(--gradient-accent);
+      }
+
+      .stat-content {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .stat-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .stat-card:nth-child(1) .stat-icon {
+        background: var(--gradient-primary);
+      }
+
+      .stat-card:nth-child(2) .stat-icon {
+        background: var(--gradient-secondary);
+      }
+
+      .stat-card:nth-child(3) .stat-icon {
+        background: var(--gradient-accent);
+      }
+
+      .stat-info h3 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .stat-info p {
+        color: var(--gray);
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      /* Main Dashboard Grid */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-bottom: 80px;
+      }
+
+      @media (max-width: 1200px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .dashboard-card {
+        background: var(--gradient-card);
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 15px 50px var(--card-shadow);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .dashboard-card:nth-child(odd) {
+        animation-delay: 0.1s;
+      }
+
+      .dashboard-card:nth-child(even) {
+        animation-delay: 0.2s;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 35px;
+      }
+
+      .card-title {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .card-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 15px;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        color: white;
+        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+      }
+
+      .card-icon.secondary {
+        background: var(--gradient-secondary);
+      }
+
+      .card-icon.accent {
+        background: var(--gradient-accent);
+      }
+
+      .card-icon.warning {
+        background: var(--gradient-warning);
+      }
+
+      .title-text h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 5px;
+      }
+
+      .title-text p {
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .action-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: var(--gray-light);
+        border: none;
+        color: var(--primary);
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .action-btn:hover {
+        background: var(--gradient-primary);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      /* Chart Container */
+      .chart-container {
+        height: 320px;
+        margin-top: 20px;
+        position: relative;
+      }
+
+      /* Recent Scans */
+      .scans-container {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+      }
+
+      .scans-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .scans-container::-webkit-scrollbar-track {
+        background: rgba(142, 150, 255, 0.1);
+        border-radius: 10px;
+      }
+
+      .scans-container::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+      }
+
+      .scan-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 25px;
+        background: white;
+        border-radius: 20px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(72, 149, 239, 0.1);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .scan-item:hover {
+        transform: translateX(10px);
+        box-shadow: 0 10px 30px rgba(67, 97, 238, 0.1);
+      }
+
+      .scan-item:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+      }
+
+      .scan-fake:before {
+        background: var(--gradient-secondary);
+      }
+
+      .scan-legit:before {
+        background: var(--gradient-accent);
+      }
+
+      .scan-suspicious:before {
+        background: var(--gradient-warning);
+      }
+
+      .scan-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex: 1;
+      }
+
+      .scan-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: white;
+      }
+
+      .scan-fake .scan-icon {
+        background: var(--gradient-secondary);
+      }
+
+      .scan-legit .scan-icon {
+        background: var(--gradient-accent);
+      }
+
+      .scan-suspicious .scan-icon {
+        background: var(--gradient-warning);
+      }
+
+      .scan-details h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .scan-details p {
+        color: var(--gray);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .scan-details span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .scan-status {
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+
+      .status-fake {
+        background: rgba(247, 37, 133, 0.1);
+        color: var(--danger);
+      }
+
+      .status-legit {
+        background: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+      }
+
+      .status-suspicious {
+        background: rgba(248, 150, 30, 0.1);
+        color: var(--warning);
+      }
+
+      /* No History */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .empty-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(67, 97, 238, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        font-size: 40px;
+        color: var(--primary);
+      }
+
+      .empty-state h3 {
+        font-size: 1.8rem;
+        color: var(--dark);
+        margin-bottom: 15px;
+      }
+
+      .empty-state p {
+        color: var(--gray);
+        max-width: 400px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+      }
+
+      /* Footer */
+      .dashboard-footer {
+        text-align: center;
+        padding: 40px 0;
+        border-top: 1px solid rgba(72, 149, 239, 0.1);
+        margin-top: 60px;
+      }
+
+      .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .footer-logo {
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .footer-stats {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .footer-stat {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--gray);
+        font-weight: 500;
+      }
+
+      .footer-stat i {
+        color: var(--primary);
+      }
+
+      .footer-bottom {
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-top: 20px;
+      }
+
+      /* Download Button */
+      .download-btn-small {
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .download-btn-small:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(67, 97, 238, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Alert Styles */
+      .alert {
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .alert-success {
+        background: rgba(67, 170, 139, 0.1);
+        border-left: 4px solid var(--success);
+        color: var(--success);
+      }
+
+      .alert-error {
+        background: rgba(249, 65, 68, 0.1);
+        border-left: 4px solid var(--danger);
+        color: var(--danger);
+      }
+
+      /* Chart type toggle - REMOVED */
+      /* .chart-toggle {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        justify-content: center;
+      } */
+
+      /* .toggle-btn {
+        padding: 8px 15px;
+        border-radius: 8px;
+        background: var(--gray-light);
+        border: none;
+        color: var(--dark);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .toggle-btn.active {
+        background: var(--gradient-primary);
+        color: white;
+      }
+
+      .toggle-btn:hover:not(.active) {
+        background: rgba(67, 97, 238, 0.1);
+      } */
+
+      /* Date format badge */
+      .date-badge {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--primary);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+    </div>
+
+    <div class="container">
+      <!-- Modern Navigation -->
+      <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="nav-brand">
+          <div class="brand-logo">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <span class="brand-text">JobGuard</span>
+        </a>
+
+        <div class="nav-actions">
+          <div class="user-profile">
+            <div class="user-avatar">
+              {{ session.get('first_name', 'U')[0]|upper }}
+            </div>
+            <div class="user-info">
+              <h4>{{ session.get('first_name', 'User') }}</h4>
+            </div>
+          </div>
+          
+          <div class="nav-buttons">
+            <a href="{{ url_for('index') }}" class="nav-btn nav-btn-primary">
+              <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="nav-btn nav-btn-secondary" style="background: var(--gradient-primary); color: white;">
+              <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-btn nav-btn-logout">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+          <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}" style="font-size: 1.5rem;"></i>
+          <span style="font-weight: 500;">{{ message }}</span>
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <!-- Dashboard Header -->
+      <div class="dashboard-header">
+        <div class="header-content">
+          <div class="header-badge">
+            <i class="fas fa-chart-line"></i>
+            Real-time Analytics Dashboard
+          </div>
+          <h1 class="dashboard-title">JobGuard Analytics Center</h1>
+          <p class="dashboard-subtitle">
+            Comprehensive insights and detailed analytics of your job scam detection activities. 
+            Monitor trends, analyze patterns, and make informed decisions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="stat-info">
+              <h3>{{ total_scans }}</h3>
+              <p>Total Scans Performed</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon">
+              <i class="fas fa-skull-crossbones"></i>
+            </div>
+            <div class="stat-info">
+              <h3>{{ fake_count }}</h3>
+              <p>Fake Jobs Detected</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-content">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3>{{ legit_count }}</h3>
+              <p>Legitimate Jobs Found</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Chart Card -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div class="title-text">
+                <h3>Detection Analysis</h3>
+                <p>Risk scores and confidence over time</p>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="action-btn" onclick="refreshChart()" title="Refresh">
+                <i class="fas fa-redo"></i>
+              </button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="analysisChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Recent Scans -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="card-icon secondary">
+                <i class="fas fa-history"></i>
+              </div>
+              <div class="title-text">
+                <h3>Recent Scans</h3>
+                <p>Latest job posting analyses with timestamps</p>
+              </div>
+            </div>
+            <div class="card-actions">
+              <form action="{{ url_for('clear_history') }}" method="POST" style="display: inline;">
+                <button type="submit" class="nav-btn nav-btn-logout" style="padding: 10px 20px;" 
+                        onclick="return confirm('Are you sure you want to clear all history? This action cannot be undone.')">
+                  <i class="fas fa-trash"></i> Clear History
+                </button>
+              </form>
+            </div>
+          </div>
+          
+          <div class="scans-container">
+            {% if history %}
+              {% for scan in history %}
+              <div class="scan-item 
+                {% if scan.result == 'Fake Job' %}scan-fake
+                {% elif scan.score > 40 and scan.score < 70 %}scan-suspicious
+                {% else %}scan-legit{% endif %}" 
+                data-scan-id="{{ scan.id }}"
+                data-scan-result="{{ scan.result }}"
+                data-scan-score="{{ scan.score }}"
+                data-scan-timestamp="{{ scan.timestamp }}"
+                data-scan-wordcount="{{ scan.word_count }}"
+                data-scan-confidence="{{ scan.confidence }}"
+                data-scan-text="{{ scan.text_preview[:200] if scan.text_preview else 'No text preview' }}">
+                <div class="scan-content">
+                  <div class="scan-icon">
+                    {% if scan.result == 'Fake Job' %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {% elif scan.score > 40 and scan.score < 70 %}
+                    <i class="fas fa-question-circle"></i>
+                    {% else %}
+                    <i class="fas fa-check-circle"></i>
+                    {% endif %}
+                  </div>
+                  <div class="scan-details">
+                    <h4>
+                      Scan #{{ scan.id }}
+                      <span class="date-badge">
+                        <i class="far fa-calendar"></i> {{ scan.timestamp.split(' ')[0] if scan.timestamp else 'N/A' }}
+                      </span>
+                    </h4>
+                    <p>
+                      <span><i class="far fa-clock"></i> {{ scan.timestamp.split(' ')[1] if scan.timestamp and ' ' in scan.timestamp else scan.timestamp }}</span>
+                      <span><i class="fas fa-font"></i> {{ scan.word_count }} words</span>
+                      <span><i class="fas fa-percentage"></i> {{ scan.score }}% risk</span>
+                      <span><i class="fas fa-shield-alt"></i> {{ scan.confidence }}% confidence</span>
+                    </p>
+                  </div>
+                </div>
+                <div class="card-actions">
+                  <span class="scan-status 
+                    {% if scan.result == 'Fake Job' %}status-fake
+                    {% elif scan.score > 40 and scan.score < 70 %}status-suspicious
+                    {% else %}status-legit{% endif %}">
+                    {% if scan.result == 'Fake Job' %}FAKE
+                    {% elif scan.score > 40 and scan.score < 70 %}SUSPICIOUS
+                    {% else %}LEGIT{% endif %}
+                  </span>
+                  <button class="download-btn-small" 
+                          onclick="downloadScanPDF(this.closest('.scan-item'))"
+                          title="Download Analysis Report">
+                    <i class="fas fa-file-pdf"></i>
+                  </button>
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fas fa-search"></i>
+                </div>
+                <h3>No Scan History Yet</h3>
+                <p>Start analyzing job postings to see your history here. Your scan results will appear in this section.</p>
+                <a href="{{ url_for('index') }}" class="nav-btn nav-btn-primary">
+                  <i class="fas fa-search"></i> Start Scanning Jobs
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="dashboard-footer">
+        <div class="footer-content">
+          <div class="footer-logo">JobGuard</div>
+          
+          <div class="footer-stats">
+            <div class="footer-stat">
+              <i class="fas fa-user"></i>
+              <span>{{ session.get('first_name', 'User') }}</span>
+            </div>
+            <div class="footer-stat">
+              <i class="fas fa-search"></i>
+              <span>{{ total_scans }} Total Scans</span>
+            </div>
+            <div class="footer-stat">
+              <i class="fas fa-shield-alt"></i>
+              <span>{{ fake_count }} Scams Blocked</span>
+            </div>
+            <div class="footer-stat">
+              <i class="fas fa-chart-line"></i>
+              <span>Last updated: <span id="liveTime">Just now</span></span>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p>© 2025 JobGuard Analytics. All rights reserved. | Protecting job seekers worldwide</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Chart configuration - Only Bar Chart
+      let analysisChart = null;
+      let chartHistory = {{ history|tojson|safe }};
+
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeChart();
+        updateLiveTime();
+        setInterval(updateLiveTime, 1000);
+        
+        // Initialize animations
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.stat-card, .dashboard-card').forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(30px)';
+          card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          observer.observe(card);
+        });
+      });
+
+      function initializeChart() {
+        const ctx = document.getElementById('analysisChart').getContext('2d');
+        
+        if (analysisChart) {
+          analysisChart.destroy();
+        }
+        
+        // Prepare data - get last 10 scans
+        const recentScans = chartHistory.slice(0, 10).reverse();
+        const labels = recentScans.map(scan => {
+          if (!scan.timestamp) return 'Scan';
+          const date = new Date(scan.timestamp);
+          return date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        });
+        
+        const riskScores = recentScans.map(scan => scan.score || 0);
+        const confidences = recentScans.map(scan => scan.confidence || 0);
+        
+        // Create Bar Chart
+        analysisChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Risk Score (%)',
+                data: riskScores,
+                backgroundColor: 'rgba(247, 37, 133, 0.7)',
+                borderColor: 'rgba(247, 37, 133, 1)',
+                borderWidth: 1,
+                yAxisID: 'y'
+              },
+              {
+                label: 'Confidence (%)',
+                data: confidences,
+                backgroundColor: 'rgba(76, 201, 240, 0.7)',
+                borderColor: 'rgba(76, 201, 240, 1)',
+                borderWidth: 1,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.05)'
+                },
+                ticks: {
+                  maxRotation: 45,
+                  minRotation: 45
+                }
+              },
+              y: {
+                beginAtZero: true,
+                max: 100,
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.05)'
+                },
+                title: {
+                  display: true,
+                  text: 'Risk Score (%)'
+                }
+              },
+              y1: {
+                beginAtZero: true,
+                max: 100,
+                position: 'right',
+                title: {
+                  display: true,
+                  text: 'Confidence (%)'
+                },
+                grid: {
+                  drawOnChartArea: false
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  font: {
+                    size: 12,
+                    family: "'Poppins', sans-serif",
+                    weight: '600'
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(42, 45, 67, 0.95)',
+                titleFont: {
+                  family: "'Poppins', sans-serif"
+                },
+                bodyFont: {
+                  family: "'Poppins', sans-serif"
+                },
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) {
+                      label += ': ';
+                    }
+                    label += context.parsed.y + '%';
+                    return label;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function refreshChart() {
+        // Re-fetch data and update chart
+        fetch(window.location.href)
+          .then(response => response.text())
+          .then(html => {
+            // Initialize chart with current data
+            initializeChart();
+            showNotification('Chart data refreshed!', 'success');
+          })
+          .catch(error => {
+            console.error('Error refreshing chart:', error);
+            showNotification('Error refreshing chart', 'error');
+          });
+      }
+
+      async function downloadScanPDF(scanElement) {
+        try {
+          // Get scan data
+          const scanId = scanElement.dataset.scanId;
+          const scanResult = scanElement.dataset.scanResult;
+          const scanScore = parseInt(scanElement.dataset.scanScore) || 0;
+          const scanTimestamp = scanElement.dataset.scanTimestamp || new Date().toLocaleString();
+          const scanWordCount = parseInt(scanElement.dataset.scanWordcount) || 0;
+          const scanConfidence = parseInt(scanElement.dataset.scanConfidence) || 0;
+          const scanText = scanElement.dataset.scanText || "No text available";
+          
+          // Show loading
+          const button = scanElement.querySelector('.download-btn-small');
+          const originalHTML = button.innerHTML;
+          button.innerHTML = '<div class="loading"></div>';
+          
+          // Generate PDF
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // Add content
+          doc.setFontSize(24);
+          doc.setTextColor(67, 97, 238);
+          doc.text("JobGuard Scan Report", 20, 25);
+          
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          
+          // Report info
+          doc.text(`Report ID: SCAN-${scanId}`, 20, 45);
+          doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 52);
+          doc.text(`Original Scan: ${scanTimestamp}`, 20, 59);
+          
+          // Result section
+          doc.setFontSize(16);
+          doc.setTextColor(42, 45, 67);
+          doc.text("Scan Result", 20, 75);
+          
+          doc.setFontSize(12);
+          let resultColor = [0, 0, 0];
+          if (scanResult.includes('Fake')) {
+            resultColor = [247, 37, 133];
+          } else if (scanScore > 40 && scanScore < 70) {
+            resultColor = [248, 150, 30];
+          } else {
+            resultColor = [76, 201, 240];
+          }
+          
+          doc.setTextColor(...resultColor);
+          doc.text(`${scanResult}`, 20, 85);
+          
+          // Metrics
+          doc.setTextColor(0, 0, 0);
+          doc.text("Metrics:", 20, 100);
+          
+          const metrics = [
+            [`Risk Score: ${scanScore}%`, getRiskLevel(scanScore)],
+            [`Confidence: ${scanConfidence}%`, getConfidenceLevel(scanConfidence)],
+            [`Word Count: ${scanWordCount}`, scanWordCount > 200 ? "Detailed" : "Brief"],
+            [`Date: ${scanTimestamp.split(' ')[0]}`, scanTimestamp.split(' ')[1] || ""]
+          ];
+          
+          let yPos = 110;
+          metrics.forEach(([metric, value]) => {
+            doc.text(`• ${metric} - ${value}`, 25, yPos);
+            yPos += 8;
+          });
+          
+          // Text preview
+          yPos += 10;
+          doc.setFontSize(12);
+          doc.text("Text Preview:", 20, yPos);
+          
+          yPos += 8;
+          doc.setFontSize(10);
+          const splitText = doc.splitTextToSize(scanText, 170);
+          const maxLines = Math.floor((280 - yPos) / 5);
+          
+          for (let i = 0; i < Math.min(splitText.length, maxLines); i++) {
+            doc.text(splitText[i], 20, yPos);
+            yPos += 5;
+          }
+          
+          if (splitText.length > maxLines) {
+            doc.text("[... text truncated ...]", 20, yPos);
+            yPos += 8;
+          }
+          
+          // Footer
+          doc.setFontSize(9);
+          doc.setTextColor(100, 100, 100);
+          doc.text("Generated by JobGuard - AI Job Scam Detection System", 105, 280, { align: 'center' });
+          doc.text("© 2025 JobGuard Analytics | Protecting Job Seekers Worldwide", 105, 285, { align: 'center' });
+          
+          // Save PDF
+          const fileName = `JobGuard_Scan_${scanId}_${new Date().toISOString().slice(0, 10)}.pdf`;
+          doc.save(fileName);
+          
+          // Restore button
+          button.innerHTML = originalHTML;
+          showNotification('Report downloaded successfully!', 'success');
+          
+        } catch (error) {
+          console.error('Error generating PDF:', error);
+          showNotification('Error generating PDF. Please try again.', 'error');
+          
+          // Restore button
+          const button = scanElement.querySelector('.download-btn-small');
+          button.innerHTML = '<i class="fas fa-file-pdf"></i>';
+        }
+      }
+
+      // Helper functions
+      function getRiskLevel(score) {
+        if (score >= 70) return 'HIGH RISK';
+        if (score >= 40) return 'MEDIUM RISK';
+        return 'LOW RISK';
+      }
+
+      function getConfidenceLevel(confidence) {
+        if (confidence >= 80) return 'HIGH';
+        if (confidence >= 60) return 'MEDIUM';
+        return 'LOW';
+      }
+
+      function updateLiveTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        const dateString = now.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('liveTime').textContent = `${timeString} | ${dateString}`;
+      }
+
+      function showNotification(message, type = 'success') {
+        // Remove existing notifications
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+        
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 15px 25px;
+          background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+          color: white;
+          border-radius: 12px;
+          font-weight: 500;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          z-index: 1001;
+          animation: slideInRight 0.3s ease-out;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        `;
+        
+        notification.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+          ${message}
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.animation = 'slideOutRight 0.3s ease-out';
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Add animation styles
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideInRight {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

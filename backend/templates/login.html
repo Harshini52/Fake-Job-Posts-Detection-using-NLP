@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | JobGuard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* All your existing CSS styles remain the same */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      :root {
+        --primary: #ff6b8b;
+        --secondary: #6a67ce;
+        --accent: #36d1dc;
+        --accent2: #ff9a3c;
+        --danger: #ff4d7e;
+        --success: #00d4aa;
+        --warning: #ffb74d;
+        --dark: #2a2d43;
+        --light: #f8f9ff;
+        --gray: #a6a9c8;
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --shadow: rgba(106, 103, 206, 0.15);
+        --gradient-1: linear-gradient(135deg, #ff6b8b 0%, #ff9a3c 100%);
+        --gradient-2: linear-gradient(135deg, #6a67ce 0%, #36d1dc 100%);
+        --gradient-3: linear-gradient(135deg, #00d4aa 0%, #6a67ce 100%);
+        --gradient-bg: linear-gradient(135deg, #f8f9ff 0%, #e6e9ff 100%);
+      }
+
+      body {
+        background: var(--gradient-bg);
+        color: var(--dark);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .login-container {
+        display: flex;
+        max-width: 1000px;
+        width: 100%;
+        min-height: 600px;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(106, 103, 206, 0.25);
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      @media (max-width: 768px) {
+        .login-container {
+          flex-direction: column;
+          max-width: 500px;
+        }
+      }
+
+      .login-left {
+        flex: 1;
+        background: var(--gradient-2);
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .login-left:before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .login-left:after {
+        content: "";
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+      }
+
+      .login-logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        z-index: 1;
+        position: relative;
+      }
+
+      .login-logo-icon {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-logo-text {
+        font-family: "Montserrat", sans-serif;
+        font-size: 2.2rem;
+        font-weight: 800;
+      }
+
+      .login-left h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        z-index: 1;
+        position: relative;
+      }
+
+      .login-left p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 40px;
+        line-height: 1.6;
+        z-index: 1;
+        position: relative;
+      }
+
+      .features-list {
+        list-style: none;
+        margin-bottom: 40px;
+        z-index: 1;
+        position: relative;
+      }
+
+      .features-list li {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+      }
+
+      .features-list i {
+        background: rgba(255, 255, 255, 0.2);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-right {
+        flex: 1;
+        background: var(--card-bg);
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .login-header h2 {
+        font-size: 2.2rem;
+        color: var(--dark);
+        margin-bottom: 10px;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 800;
+      }
+
+      .login-header p {
+        color: var(--gray);
+        font-size: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--dark);
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .input-with-icon {
+        position: relative;
+      }
+
+      .input-with-icon i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 1.1rem;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 16px 20px 16px 50px;
+        border: 2px solid #d1d5ff;
+        border-radius: 15px;
+        font-size: 1rem;
+        background: rgba(248, 249, 255, 0.7);
+        color: var(--dark);
+        transition: all 0.3s;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(255, 107, 139, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--gray);
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+
+      .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .remember-me input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary);
+      }
+
+      .remember-me label {
+        color: var(--dark);
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+
+      .forgot-password {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .forgot-password:hover {
+        color: var(--secondary);
+      }
+
+      .login-button {
+        background: var(--gradient-1);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 10px 25px rgba(255, 107, 139, 0.3);
+        margin-bottom: 25px;
+      }
+
+      .login-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 107, 139, 0.4);
+      }
+
+      .login-button:active {
+        transform: translateY(-1px);
+      }
+
+      .register-link {
+        text-align: center;
+        color: var(--gray);
+        font-size: 1rem;
+        margin-top: 20px;
+      }
+
+      .register-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 700;
+        margin-left: 5px;
+        transition: all 0.3s;
+      }
+
+      .register-link a:hover {
+        color: var(--secondary);
+        text-decoration: underline;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .floating-shapes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.05;
+        animation: float 20s infinite linear;
+      }
+
+      .shape-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--primary);
+        top: -150px;
+        right: -150px;
+        animation-delay: 0s;
+      }
+
+      .shape-2 {
+        width: 200px;
+        height: 200px;
+        background: var(--secondary);
+        bottom: -100px;
+        left: -100px;
+        animation-delay: 5s;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+        to {
+          transform: translateY(0) rotate(360deg);
+        }
+      }
+
+      .error-message {
+        color: var(--danger);
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+        font-weight: 500;
+      }
+
+      .success-message {
+        color: var(--success);
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+        font-weight: 500;
+      }
+
+      .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      .alert-error {
+        background: rgba(255, 77, 126, 0.1);
+        border-left: 4px solid var(--danger);
+        color: var(--danger);
+      }
+
+      .alert-success {
+        background: rgba(0, 212, 170, 0.1);
+        border-left: 4px solid var(--success);
+        color: var(--success);
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(42, 45, 67, 0.8);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        width: 90%;
+        max-width: 500px;
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+        transform: translateY(0);
+        animation: modalSlideIn 0.4s ease-out;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .modal-header h2 {
+        font-size: 1.8rem;
+        color: var(--dark);
+        margin-bottom: 10px;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 800;
+      }
+
+      .modal-header p {
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: var(--gray);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      .modal-close:hover {
+        background: rgba(248, 249, 255, 0.5);
+        color: var(--primary);
+      }
+
+      .modal-button {
+        background: var(--gradient-1);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 10px;
+        box-shadow: 0 10px 25px rgba(255, 107, 139, 0.3);
+      }
+
+      .modal-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 107, 139, 0.4);
+      }
+
+      .modal-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      .reset-instructions {
+        background: rgba(106, 103, 206, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        font-size: 0.9rem;
+        color: var(--dark);
+      }
+
+      .reset-instructions ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .reset-instructions li {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .reset-instructions i {
+        color: var(--secondary);
+        margin-top: 2px;
+      }
+
+      .modal-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+
+      .modal-footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .modal-footer a:hover {
+        text-decoration: underline;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .steps-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        position: relative;
+      }
+
+      .steps-container:before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: #d1d5ff;
+        z-index: 1;
+      }
+
+      .step {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+        flex: 1;
+      }
+
+      .step-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #d1d5ff;
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+
+      .step.active .step-circle {
+        background: var(--gradient-1);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .step-label {
+        font-size: 0.8rem;
+        color: var(--gray);
+        font-weight: 600;
+      }
+
+      .step.active .step-label {
+        color: var(--primary);
+      }
+
+      .step-content {
+        display: none;
+      }
+
+      .step-content.active {
+        display: block;
+      }
+
+      .resend-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9rem;
+      }
+
+      .resend-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .resend-link a:hover {
+        text-decoration: underline;
+      }
+
+      .resend-link a:disabled {
+        color: var(--gray);
+        cursor: not-allowed;
+      }
+
+      .timer {
+        font-weight: 600;
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+    </div>
+
+    <div class="login-container">
+      <!-- Left Side -->
+      <div class="login-left">
+        <div class="login-logo">
+          <div class="login-logo-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="login-logo-text">JobGuard</div>
+        </div>
+
+        <h1>Secure Your Job Search Journey</h1>
+        <p>
+          Join thousands of users who trust JobGuard to protect them from
+          employment scams and fake job postings.
+        </p>
+
+        <ul class="features-list">
+          <li><i class="fas fa-check"></i> AI-powered fake job detection</li>
+          <li><i class="fas fa-check"></i> Real-time scanning technology</li>
+          <li><i class="fas fa-check"></i> Advanced analytics dashboard</li>
+          <li><i class="fas fa-check"></i> 99% detection accuracy</li>
+          <li><i class="fas fa-check"></i> Secure & private data handling</li>
+        </ul>
+
+        <div style="z-index: 1; position: relative">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              margin-bottom: 10px;
+            "
+          >
+            <i class="fas fa-star" style="color: #ff9a3c"></i>
+            <span
+              >"JobGuard saved me from a potential scam. Highly
+              recommended!"</span
+            >
+          </div>
+          <p style="font-size: 0.9rem; opacity: 0.8">
+            - Sarah Johnson, Software Developer
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="login-right">
+        <div class="login-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in to your JobGuard account</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ 'error' if category == 'danger' else category }}"
+        >
+          <i
+            class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"
+          ></i>
+          {{ message }}
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+          <div class="form-group">
+            <label for="email"
+              ><i class="fas fa-envelope"></i> Email Address</label
+            >
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter your email"
+                required
+                value="{{ request.form.email if request.form else '' }}"
+              />
+            </div>
+            <div class="error-message" id="emailError">
+              Please enter a valid email address
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <div class="input-with-icon">
+              <i class="fas fa-key"></i>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                placeholder="Enter your password"
+                required
+              />
+              <button type="button" class="password-toggle" id="togglePassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="error-message" id="passwordError">
+              Password must be at least 8 characters
+            </div>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input type="checkbox" id="remember" name="remember" />
+              <label for="remember">Remember me</label>
+            </div>
+            <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="login-button">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+          </button>
+
+          <div class="success-message" id="loginSuccess">
+            Login successful! Redirecting...
+          </div>
+        </form>
+
+        <div class="register-link">
+          Don't have an account?
+          <a href="{{ url_for('register') }}">Create Account</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        
+        <div class="modal-header">
+          <h2>Reset Your Password</h2>
+          <p>Follow these steps to reset your password</p>
+        </div>
+
+        <!-- Steps Indicator -->
+        <div class="steps-container">
+          <div class="step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Enter Email</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Verify Code</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-circle">3</div>
+            <div class="step-label">New Password</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Enter Email -->
+        <div class="step-content active" id="step1">
+          <div class="reset-instructions">
+            <ul>
+              <li><i class="fas fa-info-circle"></i> Enter your email address associated with your JobGuard account</li>
+              <li><i class="fas fa-envelope"></i> We'll send a 6-digit verification code to your email</li>
+              <li><i class="fas fa-clock"></i> The code will expire in 15 minutes</li>
+            </ul>
+          </div>
+
+          <form id="resetPasswordFormStep1">
+            <div class="form-group">
+              <label for="resetEmail"><i class="fas fa-envelope"></i> Email Address</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  name="resetEmail"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+              <div class="error-message" id="resetEmailError">
+                Please enter a valid email address
+              </div>
+            </div>
+
+            <button type="submit" class="modal-button" id="sendCodeBtn">
+              <i class="fas fa-paper-plane"></i> Send Verification Code
+            </button>
+          </form>
+
+          <div class="modal-footer">
+            Remember your password? <a href="#" id="backToLogin">Back to Login</a>
+          </div>
+        </div>
+
+        <!-- Step 2: Verify Code -->
+        <div class="step-content" id="step2">
+          <div class="reset-instructions">
+            <ul>
+              <li><i class="fas fa-key"></i> Enter the 6-digit verification code sent to your email</li>
+              <li><i class="fas fa-clock"></i> Code expires in <span class="timer" id="timer">15:00</span> minutes</li>
+              <li><i class="fas fa-envelope"></i> Check your spam folder if you don't see the email</li>
+            </ul>
+          </div>
+
+          <form id="resetPasswordFormStep2">
+            <div class="form-group">
+              <label for="verificationCode"><i class="fas fa-shield-alt"></i> Verification Code</label>
+              <div class="input-with-icon">
+                <i class="fas fa-key"></i>
+                <input
+                  type="text"
+                  id="verificationCode"
+                  name="verificationCode"
+                  class="form-control"
+                  placeholder="Enter 6-digit code"
+                  maxlength="6"
+                  required
+                  pattern="\d{6}"
+                  title="Please enter exactly 6 digits"
+                />
+              </div>
+              <div class="error-message" id="codeError">
+                Please enter the 6-digit code
+              </div>
+            </div>
+
+            <button type="submit" class="modal-button" id="verifyCodeBtn">
+              <i class="fas fa-check-circle"></i> Verify Code
+            </button>
+          </form>
+
+          <div class="resend-link">
+            Didn't receive the code? <a href="#" id="resendCodeBtn">Resend Code</a> <span id="resendTimer">(60s)</span>
+          </div>
+        </div>
+
+        <!-- Step 3: New Password -->
+        <div class="step-content" id="step3">
+          <div class="reset-instructions">
+            <ul>
+              <li><i class="fas fa-lock"></i> Create a strong new password</li>
+              <li><i class="fas fa-check"></i> Must be at least 8 characters long</li>
+              <li><i class="fas fa-check"></i> Include uppercase, lowercase, and numbers</li>
+            </ul>
+          </div>
+
+          <form id="resetPasswordFormStep3">
+            <div class="form-group">
+              <label for="newPassword"><i class="fas fa-lock"></i> New Password</label>
+              <div class="input-with-icon">
+                <i class="fas fa-key"></i>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  class="form-control"
+                  placeholder="Enter new password"
+                  required
+                  minlength="8"
+                />
+                <button type="button" class="password-toggle" id="toggleNewPassword">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="error-message" id="newPasswordError">
+                Password must be at least 8 characters with uppercase, lowercase, and numbers
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+              <div class="input-with-icon">
+                <i class="fas fa-key"></i>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="form-control"
+                  placeholder="Confirm new password"
+                  required
+                  minlength="8"
+                />
+                <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              <div class="error-message" id="confirmPasswordError">
+                Passwords do not match
+              </div>
+            </div>
+
+            <button type="submit" class="modal-button" id="resetPasswordBtn">
+              <i class="fas fa-sync-alt"></i> Reset Password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Password toggle for login form
+      const togglePassword = document.getElementById("togglePassword");
+      const passwordInput = document.getElementById("password");
+
+      if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", function () {
+          const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+          passwordInput.setAttribute("type", type);
+          this.innerHTML = type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+      }
+
+      // Form validation for login
+      const loginForm = document.getElementById("loginForm");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+
+          let isValid = true;
+
+          // Clear previous errors
+          if (emailError) emailError.style.display = "none";
+          if (passwordError) passwordError.style.display = "none";
+
+          // Validate email
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            if (emailError) {
+              emailError.textContent = "Please enter a valid email address";
+              emailError.style.display = "block";
+            }
+            isValid = false;
+          }
+
+          // Validate password
+          if (password.length < 8) {
+            if (passwordError) {
+              passwordError.textContent = "Password must be at least 8 characters";
+              passwordError.style.display = "block";
+            }
+            isValid = false;
+          }
+
+          if (!isValid) {
+            e.preventDefault();
+            // Scroll to first error
+            document.querySelector('.error-message[style*="block"]')?.parentElement?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+          }
+        });
+      }
+
+      // Auto-hide flash messages
+      setTimeout(() => {
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach((alert) => {
+          alert.style.opacity = "0";
+          alert.style.transform = "translateY(-10px)";
+          setTimeout(() => alert.remove(), 300);
+        });
+      }, 5000);
+
+      // Forgot Password Modal
+      const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+      const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+      const modalClose = document.getElementById("modalClose");
+      const backToLogin = document.getElementById("backToLogin");
+      
+      // Modal control
+      if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener("click", function(e) {
+          e.preventDefault();
+          forgotPasswordModal.style.display = "flex";
+          document.body.style.overflow = "hidden";
+          resetModal();
+        });
+      }
+
+      if (modalClose) modalClose.addEventListener("click", closeModal);
+      if (backToLogin) backToLogin.addEventListener("click", function(e) {
+        e.preventDefault();
+        closeModal();
+      });
+
+      // Close modal when clicking outside or pressing Escape
+      window.addEventListener("click", function(e) {
+        if (e.target === forgotPasswordModal) closeModal();
+      });
+
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" && forgotPasswordModal.style.display === "flex") closeModal();
+      });
+
+      function closeModal() {
+        forgotPasswordModal.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+
+      function resetModal() {
+        showStep(1);
+        document.getElementById("resetEmail").value = "";
+        document.getElementById("verificationCode").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+        
+        document.querySelectorAll('.error-message').forEach(el => {
+          el.style.display = 'none';
+        });
+        
+        document.getElementById("sendCodeBtn").disabled = false;
+        document.getElementById("verifyCodeBtn").disabled = false;
+        document.getElementById("resetPasswordBtn").disabled = false;
+        
+        clearInterval(window.timerInterval);
+        clearInterval(window.resendTimerInterval);
+      }
+
+      // Step navigation
+      function showStep(stepNumber) {
+        document.querySelectorAll('.step').forEach(step => {
+          step.classList.remove('active');
+          if (parseInt(step.dataset.step) === stepNumber) step.classList.add('active');
+        });
+        
+        document.querySelectorAll('.step-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(`step${stepNumber}`).classList.add('active');
+      }
+
+      // Step 1: Send verification code
+      const resetFormStep1 = document.getElementById("resetPasswordFormStep1");
+      const resetEmailError = document.getElementById("resetEmailError");
+      const sendCodeBtn = document.getElementById("sendCodeBtn");
+
+      if (resetFormStep1) {
+        resetFormStep1.addEventListener("submit", async function(e) {
+          e.preventDefault();
+          const email = document.getElementById("resetEmail").value.trim();
+          
+          if (resetEmailError) resetEmailError.style.display = "none";
+          
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            if (resetEmailError) {
+              resetEmailError.textContent = "Please enter a valid email address";
+              resetEmailError.style.display = "block";
+            }
+            return;
+          }
+          
+          // Show loading
+          const originalText = sendCodeBtn.innerHTML;
+          sendCodeBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+          sendCodeBtn.disabled = true;
+          
+          try {
+            // Call Flask API
+            console.log('Sending reset request for:', email);
+            const response = await fetch('/api/forgot-password', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ email: email })
+            });
+            
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Response data:', data);
+            
+            if (data.success) {
+              sendCodeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Code Sent';
+              
+              // Store email for next steps
+              sessionStorage.setItem('resetEmail', email);
+              
+              setTimeout(() => {
+                showStep(2);
+                startTimer(15 * 60);
+                startResendTimer(60);
+                
+                // Reset button
+                sendCodeBtn.innerHTML = originalText;
+                sendCodeBtn.disabled = false;
+                
+                // Show debug code if available
+                if (data.debug_code) {
+                  console.log("🔐 RESET CODE FOR TESTING: " + data.debug_code);
+                  alert("DEBUG MODE: Your reset code is " + data.debug_code + "\nCheck console for details.");
+                } else {
+                  console.log("✅ Reset code sent successfully");
+                }
+                
+              }, 1000);
+            } else {
+              sendCodeBtn.innerHTML = originalText;
+              sendCodeBtn.disabled = false;
+              
+              if (resetEmailError) {
+                resetEmailError.textContent = data.message || 'Failed to send code. Please try again.';
+                resetEmailError.style.display = "block";
+              }
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            sendCodeBtn.innerHTML = originalText;
+            sendCodeBtn.disabled = false;
+            
+            if (resetEmailError) {
+              resetEmailError.textContent = 'Network error. Please check if server is running.';
+              resetEmailError.style.display = "block";
+            }
+          }
+        });
+      }
+
+      // Step 2: Verify code
+      const resetFormStep2 = document.getElementById("resetPasswordFormStep2");
+      const codeError = document.getElementById("codeError");
+      const verifyCodeBtn = document.getElementById("verifyCodeBtn");
+      const resendCodeBtn = document.getElementById("resendCodeBtn");
+
+      if (resetFormStep2) {
+        resetFormStep2.addEventListener("submit", async function(e) {
+          e.preventDefault();
+          const code = document.getElementById("verificationCode").value.trim();
+          const email = sessionStorage.getItem('resetEmail') || document.getElementById("resetEmail").value;
+          
+          if (codeError) codeError.style.display = "none";
+          
+          if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+            if (codeError) {
+              codeError.textContent = "Please enter a valid 6-digit code";
+              codeError.style.display = "block";
+            }
+            return;
+          }
+          
+          // Show loading
+          const originalText = verifyCodeBtn.innerHTML;
+          verifyCodeBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+          verifyCodeBtn.disabled = true;
+          
+          try {
+            console.log('Verifying code:', code, 'for email:', email);
+            const response = await fetch('/api/verify-reset-code', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ email: email, code: code })
+            });
+            
+            console.log('Verification response status:', response.status);
+            const data = await response.json();
+            console.log('Verification data:', data);
+            
+            if (data.success) {
+              verifyCodeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verified';
+              
+              setTimeout(() => {
+                showStep(3);
+                verifyCodeBtn.innerHTML = originalText;
+                verifyCodeBtn.disabled = false;
+                clearInterval(window.timerInterval);
+                console.log("✅ Code verified successfully");
+              }, 1000);
+            } else {
+              verifyCodeBtn.innerHTML = originalText;
+              verifyCodeBtn.disabled = false;
+              
+              if (codeError) {
+                codeError.textContent = data.message || 'Invalid or expired code';
+                codeError.style.display = "block";
+              }
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            verifyCodeBtn.innerHTML = originalText;
+            verifyCodeBtn.disabled = false;
+            
+            if (codeError) {
+              codeError.textContent = 'Network error. Please try again.';
+              codeError.style.display = "block";
+            }
+          }
+        });
+      }
+
+      // Resend code
+      if (resendCodeBtn) {
+        resendCodeBtn.addEventListener("click", async function(e) {
+          e.preventDefault();
+          if (this.disabled) return;
+          
+          const email = sessionStorage.getItem('resetEmail') || document.getElementById("resetEmail").value;
+          
+          this.disabled = true;
+          this.style.pointerEvents = "none";
+          this.style.opacity = "0.6";
+          
+          try {
+            const response = await fetch('/api/forgot-password', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ email: email })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+              startResendTimer(60);
+              console.log("✅ New code sent!");
+              if (data.debug_code) {
+                console.log("🔐 NEW RESET CODE: " + data.debug_code);
+                alert("New code sent! Code: " + data.debug_code);
+              }
+            } else {
+              this.disabled = false;
+              this.style.pointerEvents = "auto";
+              this.style.opacity = "1";
+              alert("Failed to resend code: " + (data.message || "Unknown error"));
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            this.disabled = false;
+            this.style.pointerEvents = "auto";
+            this.style.opacity = "1";
+            alert("Network error. Please try again.");
+          }
+        });
+      }
+
+      // Step 3: Reset password
+      const resetFormStep3 = document.getElementById("resetPasswordFormStep3");
+      const newPasswordError = document.getElementById("newPasswordError");
+      const confirmPasswordError = document.getElementById("confirmPasswordError");
+      const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+
+      // Password toggles
+      const toggleNewPassword = document.getElementById("toggleNewPassword");
+      const newPasswordInput = document.getElementById("newPassword");
+      const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+
+      if (toggleNewPassword && newPasswordInput) {
+        toggleNewPassword.addEventListener("click", function() {
+          const type = newPasswordInput.getAttribute("type") === "password" ? "text" : "password";
+          newPasswordInput.setAttribute("type", type);
+          this.innerHTML = type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+      }
+
+      if (toggleConfirmPassword && confirmPasswordInput) {
+        toggleConfirmPassword.addEventListener("click", function() {
+          const type = confirmPasswordInput.getAttribute("type") === "password" ? "text" : "password";
+          confirmPasswordInput.setAttribute("type", type);
+          this.innerHTML = type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+      }
+
+      if (resetFormStep3) {
+        resetFormStep3.addEventListener("submit", async function(e) {
+          e.preventDefault();
+          const newPassword = document.getElementById("newPassword").value.trim();
+          const confirmPassword = document.getElementById("confirmPassword").value.trim();
+          const email = sessionStorage.getItem('resetEmail') || document.getElementById("resetEmail").value;
+          
+          if (newPasswordError) newPasswordError.style.display = "none";
+          if (confirmPasswordError) confirmPasswordError.style.display = "none";
+          
+          let isValid = true;
+          
+          // Simple password validation
+          const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+          if (!passwordRegex.test(newPassword)) {
+            if (newPasswordError) {
+              newPasswordError.textContent = "Password must be at least 8 characters with uppercase, lowercase, and numbers";
+              newPasswordError.style.display = "block";
+            }
+            isValid = false;
+          }
+          
+          if (newPassword !== confirmPassword) {
+            if (confirmPasswordError) {
+              confirmPasswordError.textContent = "Passwords do not match";
+              confirmPasswordError.style.display = "block";
+            }
+            isValid = false;
+          }
+          
+          if (!isValid) return;
+          
+          // Show loading
+          const originalText = resetPasswordBtn.innerHTML;
+          resetPasswordBtn.innerHTML = '<span class="loading-spinner"></span> Resetting...';
+          resetPasswordBtn.disabled = true;
+          
+          try {
+            console.log('Resetting password for:', email);
+            const response = await fetch('/api/reset-password', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ 
+                email: email, 
+                new_password: newPassword 
+              })
+            });
+            
+            console.log('Reset response status:', response.status);
+            const data = await response.json();
+            console.log('Reset data:', data);
+            
+            if (data.success) {
+              resetPasswordBtn.innerHTML = '<i class="fas fa-check-circle"></i> Password Reset!';
+              
+              setTimeout(() => {
+                closeModal();
+                sessionStorage.removeItem('resetEmail');
+                alert("✅ Password reset successful!\n\nYou can now login with your new password.");
+                // Optionally redirect to login
+                // window.location.href = '/login';
+              }, 1000);
+            } else {
+              resetPasswordBtn.innerHTML = originalText;
+              resetPasswordBtn.disabled = false;
+              alert("❌ " + (data.message || "Failed to reset password"));
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            resetPasswordBtn.innerHTML = originalText;
+            resetPasswordBtn.disabled = false;
+            alert("❌ Network error. Please check your connection and try again.");
+          }
+        });
+      }
+
+      // Timer functions
+      function startTimer(seconds) {
+        clearInterval(window.timerInterval);
+        const timerDisplay = document.getElementById("timer");
+        if (!timerDisplay) return;
+        
+        let remainingSeconds = seconds;
+        
+        function updateTimer() {
+          const minutes = Math.floor(remainingSeconds / 60);
+          const secs = remainingSeconds % 60;
+          timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+          
+          if (remainingSeconds <= 0) {
+            clearInterval(window.timerInterval);
+            if (codeError) {
+              codeError.textContent = "Code expired. Please request a new one.";
+              codeError.style.display = "block";
+            }
+            // Auto go back to step 1
+            setTimeout(() => showStep(1), 1000);
+          }
+          remainingSeconds--;
+        }
+        
+        updateTimer();
+        window.timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      function startResendTimer(seconds) {
+        clearInterval(window.resendTimerInterval);
+        const resendTimerDisplay = document.getElementById("resendTimer");
+        const resendBtn = document.getElementById("resendCodeBtn");
+        
+        if (!resendTimerDisplay || !resendBtn) return;
+        
+        let remainingSeconds = seconds;
+        
+        function updateResendTimer() {
+          resendTimerDisplay.textContent = `(${remainingSeconds}s)`;
+          if (remainingSeconds <= 0) {
+            clearInterval(window.resendTimerInterval);
+            resendTimerDisplay.textContent = "";
+            resendBtn.disabled = false;
+            resendBtn.style.pointerEvents = "auto";
+            resendBtn.style.opacity = "1";
+          }
+          remainingSeconds--;
+        }
+        
+        resendBtn.disabled = true;
+        resendBtn.style.pointerEvents = "none";
+        resendBtn.style.opacity = "0.6";
+        updateResendTimer();
+        window.resendTimerInterval = setInterval(updateResendTimer, 1000);
+      }
+
+      // Debug helper - check if API endpoints exist
+      console.log("🔧 Debug: Checking API endpoints...");
+      fetch('/test-reset-api')
+        .then(response => response.json())
+        .then(data => console.log("✅ Reset API test:", data))
+        .catch(err => console.warn("⚠️ Reset API test failed:", err.message));
+
+    </script>
+  </body>
+</html>
