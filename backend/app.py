@@ -11,10 +11,8 @@ from scipy.sparse import hstack
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from backend.scam_keywords import scam_keywords
-from backend.ocr_utils import extract_text_from_image
-from backend import job_predict
-
+from scam_keywords import scam_keywords
+from ocr_utils import extract_text_from_image
 
 # -------------------------------------------------
 # APP CONFIG
