@@ -12,3 +12,6 @@ pytesseract
 flask-sqlalchemy==3.0.5
 psycopg2-binary==2.9.7
 werkzeug==2.3.7
+setuptools
+wheel
+
